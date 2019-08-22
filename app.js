@@ -9,7 +9,7 @@ const compression = require('compression')
 app.use(compression())
 
 // Serve the files out of ./public as our main files
-app.use('/', express.static())
+app.use('/', express.static(path.join(__dirname, '/build')))
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '/build/index.html'))
