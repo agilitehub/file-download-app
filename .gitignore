@@ -63,3 +63,4 @@ package-lock.json
 
 # ignore config.js, as this will be modified on local environments
 config.js
+build

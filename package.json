@@ -1,7 +1,7 @@
 {
-  "name": "file-download-app",
-  "description": "A ReactJS app that allows the downloading of files via a UI",
-  "version": "0.0.1",
+  "name": "agilite-file-download-app",
+  "description": "A ReactJS App that allows the downloading of files via a UI",
+  "version": "1.0.0",
   "private": false,
   "scripts": {
     "start": "react-scripts start",

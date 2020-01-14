@@ -19,6 +19,6 @@ app.get('/', function (req, res) {
 const port = process.env.PORT || 80
 const server = http.createServer(app)
 
-server.listen(port, function () {
-  console.log('File Download App listening on: ', port)
+server.listen(port, () => {
+  console.log('Agilit-e File Download App listening on: ', port)
 })
