@@ -1,4 +1,6 @@
-require('dotenv').config()
+'use strict'
+
+require('agilite-utils/dotenv').config()
 
 const express = require('express')
 const path = require('path')
@@ -8,17 +10,17 @@ const compression = require('compression')
 
 app.use(compression())
 
-// Serve the files out of ./public as our main files
+// Serve the files out of ./build as our main files
 app.use('/', express.static(path.join(__dirname, '/build')))
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/build/index.html'))
 })
 
 // Server Setup
-const port = process.env.PORT || 80
+const port = process.env.PORT
 const server = http.createServer(app)
 
 server.listen(port, () => {
-  console.log('Agilit-e File Download App listening on: ', port)
+  console.log(`${process.env.REACT_APP_NAME} listening on Port - ${process.env.PORT}`)
 })

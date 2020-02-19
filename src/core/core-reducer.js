@@ -1,22 +1,45 @@
-import coreState from './core-state'
-import { actions } from './core-actions'
+import CoreState from './core-state'
+import CoreEnums from './resources/enums'
+import { setupState, prepTabArray } from './core-utils'
 
-const core = (state = coreState, action) => {
+export default (state = CoreState, action) => {
+  let tabArray = null
+
   switch (action.type) {
-    case actions.SET_PARAMS:
-      let urlParams = {}
-
-      // eslint-disable-next-line
-      for (let x in action.params) {
-        urlParams[x] = action.params[x]
-      }
+    case CoreEnums.reducers.SET_TOOLBAR:
+      return Object.assign({}, state, {
+        toolbar: action.payload
+      })
+    case CoreEnums.reducers.SET_TABS:
+      tabArray = prepTabArray(action.tabs, action.payload)
 
       return Object.assign({}, state, {
-        urlParams
+        tabNavigation: {
+          ...state.tabNavigation,
+          tabs: tabArray,
+          activeKey: action.payload.key
+        }
       })
+    case CoreEnums.reducers.LOAD_CONTENT:
+      // Check if Tab Navigation is enabled and load component accordingly
+      if (state.tabNavigation.enabled) {
+        tabArray = prepTabArray(state.tabNavigation.tabs, action.payload)
+
+        return Object.assign({}, state, {
+          tabNavigation: {
+            ...state.tabNavigation,
+            tabs: tabArray,
+            activeKey: action.payload.key
+          }
+        })
+      } else {
+        return Object.assign({}, state, {
+          landingPageContent: action.payload.content
+        })
+      }
+    case CoreEnums.reducers.RESET:
+      return Object.assign({}, state, setupState())
     default:
       return state
   }
 }
-
-export default core

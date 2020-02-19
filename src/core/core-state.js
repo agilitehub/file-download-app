@@ -1,5 +1,2 @@
-const coreState = {
-  urlParams: {}
-}
-
-export default coreState
+import { setupState } from './core-utils'
+export default setupState()
