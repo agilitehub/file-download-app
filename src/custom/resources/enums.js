@@ -9,7 +9,8 @@ const Enums = {
     PROFILE_KEY: 'profile-key',
     ROUTE_KEY: 'route-key',
     GETFILE: 'getfile',
-    EXECUTECONNECTOR: 'executeconnector'
+    EXECUTECONNECTOR: 'executeconnector',
+    FILE_NAME: 'fileName'
   },
   STATUS: {
     PROCESSING: 'processing',

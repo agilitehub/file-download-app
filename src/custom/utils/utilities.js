@@ -1,21 +1,7 @@
 import Enums from '../resources/enums'
 import Axios from 'axios'
 import Agilite from 'agilite'
-
-export const getQueryParams = (qs) => {
-  const params = {}
-  const re = /[?&]?([^=]+)=([^&]*)/g
-  let tokens = null
-
-  qs = qs.split('+').join(' ')
-
-  // eslint-disable-next-line
-  while (tokens = re.exec(qs)) {
-    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2])
-  }
-
-  return params
-}
+import UUID from 'uuid'
 
 export const processTransaction = (queryParams, callback) => {
   const config = {
@@ -59,13 +45,13 @@ export const processTransaction = (queryParams, callback) => {
 
         agilite.Files.getFile(queryParams[Enums.VALUES.RECORD_ID], Enums.VALUES.RESPONSE_TYPE_ARRAY_BUFFER)
           .then(response => {
-            console.log(response)
             // eslint-disable-next-line
             const blob = new Blob([response.data])
             const url = URL.createObjectURL(blob)
             const a = document.createElement('a')
 
             a.href = url
+            a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID.v1()
             a.style.display = 'none'
             document.body.appendChild(a)
             a.click()
@@ -99,6 +85,7 @@ export const processTransaction = (queryParams, callback) => {
             const a = document.createElement('a')
 
             a.href = url
+            a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID.v1()
             a.style.display = 'none'
             document.body.appendChild(a)
             a.click()
@@ -133,6 +120,7 @@ export const processTransaction = (queryParams, callback) => {
         const a = document.createElement('a')
 
         a.href = url
+        a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID.v1()
         a.style.display = 'none'
         document.body.appendChild(a)
         a.click()

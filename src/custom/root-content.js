@@ -4,7 +4,8 @@ import agiliteLogo from './resources/agilite-logo-full-web.png'
 import Enums from './resources/enums'
 import Theme from './resources/theme'
 
-import { getQueryParams, processTransaction } from './utils/utilities'
+import { processTransaction } from './utils/utilities'
+import { getQueryParams } from 'agilite-utils'
 
 class App extends React.Component {
   constructor (props) {
