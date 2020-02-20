@@ -1,12 +1,13 @@
 import React, { memo } from 'react'
 import { message, Row, Col, Spin } from 'antd'
-import agiliteLogo from './resources/agilite-logo-full-web.png'
-import Enums from './resources/enums'
-import Theme from './resources/theme'
-
-import { processTransaction } from './utils/utilities'
 import { getQueryParams } from 'agilite-utils'
 
+import CoreMemoryStore from '../core/core-memory-store'
+import Logo from '../core/resources/agilite-logo-full-web.png'
+import Enums from './resources/enums'
+import { processTransaction } from './utils/utilities'
+
+const theme = CoreMemoryStore.theme
 class App extends React.Component {
   constructor (props) {
     super(props)
@@ -19,8 +20,8 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    const tmpThis = this
     // Process URL Parameters
+    const tmpThis = this
     const url = new URL(window.location.href)
 
     processTransaction(getQueryParams(url.search), (err) => {
@@ -46,18 +47,18 @@ class App extends React.Component {
         <Row gutter={24} type='flex' justify='center'>
           <Col xs={24} sm={24} md={24} lg={24}>
             <div>
-              <img src={agiliteLogo} style={{ width: 300 }} alt='Agilit-e' />
+              <img src={Logo} style={{ width: 300 }} alt='Agilit-e' />
 
               {this.state.status === Enums.STATUS.PROCESSING
                 ? <h2>Processing Transaction</h2>
                 : null}
 
               {this.state.status === Enums.STATUS.FAILED
-                ? <h2 style={{ color: Theme.dangerColor }}>Transaction Failed</h2>
+                ? <h2 style={{ color: theme.dangerColor }}>Transaction Failed</h2>
                 : null}
 
               {this.state.status === Enums.STATUS.COMPLETED
-                ? <h2 style={{ color: Theme.successColor }}>Transaction Complete</h2>
+                ? <h2 style={{ color: theme.successColor }}>Transaction Complete</h2>
                 : null}
 
               <Spin spinning={this.state.isProcessing} style={{ marginLeft: 10, marginTop: 50 }} delay={100} size='large' />

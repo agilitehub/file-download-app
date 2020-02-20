@@ -4,13 +4,14 @@ const Enums = {
     WEBHOOKURL: 'webhookurl',
     METHOD: 'method',
     AGILITETYPE: 'agilitetype',
-    API_KEY: 'api-key',
-    RECORD_ID: 'record-id',
-    PROFILE_KEY: 'profile-key',
-    ROUTE_KEY: 'route-key',
+    API_KEY: 'agiliteapikey',
+    RECORD_ID: 'agiliterecordid',
+    PROFILE_KEY: 'agiliteprofilekey',
+    ROUTE_KEY: 'agiliteroutekey',
     GETFILE: 'getfile',
     EXECUTECONNECTOR: 'executeconnector',
-    FILE_NAME: 'fileName'
+    FILE_NAME: 'fileName',
+    METHOD_GET: 'get'
   },
   STATUS: {
     PROCESSING: 'processing',

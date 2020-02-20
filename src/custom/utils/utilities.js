@@ -1,7 +1,7 @@
-import Enums from '../resources/enums'
-import Axios from 'axios'
+import Axios from 'agilite-utils/axios'
+import { v1 as UUID } from 'agilite-utils/uuid'
 import Agilite from 'agilite'
-import UUID from 'uuid'
+import Enums from '../resources/enums'
 
 export const processTransaction = (queryParams, callback) => {
   const config = {
@@ -11,21 +11,19 @@ export const processTransaction = (queryParams, callback) => {
     data: {},
     responseType: Enums.VALUES.RESPONSE_TYPE_ARRAY_BUFFER
   }
+
   let errorMsg = null
 
   // Validate queryParams for webhookurl
   if (!queryParams || !queryParams[Enums.VALUES.WEBHOOKURL]) {
     errorMsg = `No Webhook URL found in the '${Enums.VALUES.WEBHOOKURL}' query param. Please revise`
-  }
-
-  if (errorMsg) {
     return callback(errorMsg)
   }
 
   config.url = queryParams[Enums.VALUES.WEBHOOKURL]
 
   if (queryParams[Enums.VALUES.AGILITETYPE]) {
-    if (!queryParams[Enums.VALUES.API_KEY] || queryParams[Enums.VALUES.API_KEY] === '') {
+    if (!queryParams[Enums.VALUES.API_KEY]) {
       errorMsg = `The '${Enums.VALUES.API_KEY}' query parameter is required when an '${Enums.VALUES.AGILITETYPE}' query parameter is present`
       return callback(errorMsg)
     }
@@ -38,7 +36,7 @@ export const processTransaction = (queryParams, callback) => {
     switch (queryParams[Enums.VALUES.AGILITETYPE]) {
       case Enums.VALUES.GETFILE.toLowerCase():
         // Get File
-        if (!queryParams[Enums.VALUES.RECORD_ID] || queryParams[Enums.VALUES.RECORD_ID] === '') {
+        if (!queryParams[Enums.VALUES.RECORD_ID]) {
           errorMsg = `No Record Id found in the '${Enums.VALUES.RECORD_ID}' query param. Please revise`
           return callback(errorMsg)
         }
@@ -51,31 +49,33 @@ export const processTransaction = (queryParams, callback) => {
             const a = document.createElement('a')
 
             a.href = url
-            a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID.v1()
+            a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID()
             a.style.display = 'none'
             document.body.appendChild(a)
             a.click()
 
-            return callback(null)
+            callback()
           })
           .catch(err => {
-            if (err.response.data) {
+            if (err.response) {
               err = err.response.data.errorMessage
             } else {
-              err = 'Request Unsuccessful'
+              err = err.message || err.stack || err
             }
+
             callback(err)
           })
+
         break
       case Enums.VALUES.EXECUTECONNECTOR.toLowerCase():
         // Execute Connector
-        if (!queryParams[Enums.VALUES.PROFILE_KEY] || queryParams[Enums.VALUES.PROFILE_KEY] === '') {
+        if (!queryParams[Enums.VALUES.PROFILE_KEY]) {
           errorMsg = `No Profile Key found in the '${Enums.VALUES.PROFILE_KEY}' query param. Please revise`
-          return callback(errorMsg)
-        } else if (!queryParams[Enums.VALUES.ROUTE_KEY] || queryParams[Enums.VALUES.ROUTE_KEY] === '') {
+        } else if (!queryParams[Enums.VALUES.ROUTE_KEY]) {
           errorMsg = `No Route Key found in the '${Enums.VALUES.ROUTE_KEY}' query param. Please revise`
-          return callback(errorMsg)
         }
+
+        if (errorMsg) return callback(errorMsg)
 
         agilite.Connectors.execute(queryParams[Enums.VALUES.PROFILE_KEY], queryParams[Enums.VALUES.ROUTE_KEY])
           .then(response => {
@@ -85,31 +85,33 @@ export const processTransaction = (queryParams, callback) => {
             const a = document.createElement('a')
 
             a.href = url
-            a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID.v1()
+            a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID()
             a.style.display = 'none'
             document.body.appendChild(a)
             a.click()
 
-            return callback(null)
+            callback()
           })
           .catch(err => {
-            if (err.response.data) {
+            if (err.response) {
               err = err.response.data.errorMessage
             } else {
-              err = 'Request Unsuccessful'
+              err = err.message || err.stack || err
             }
+
             callback(err)
           })
+
         break
       default:
-        errorMsg = `'agilitetype' query parameter must have a value of '${Enums.VALUES.GETFILE}' or '${Enums.VALUES.EXECUTECONNECTOR}'`
-        return callback(errorMsg)
+        errorMsg = `'${Enums.VALUES.AGILITETYPE}' query parameter must have a value of '${Enums.VALUES.GETFILE}' or '${Enums.VALUES.EXECUTECONNECTOR}'`
+        callback(errorMsg)
     }
   } else {
-    if (queryParams[Enums.VALUES.METHOD] && queryParams[Enums.VALUES.METHOD] !== '') {
+    if (queryParams[Enums.VALUES.METHOD]) {
       config.method = queryParams[Enums.VALUES.METHOD]
     } else {
-      config.method = 'GET'
+      config.method = Enums.VALUES.METHOD_GET
     }
 
     Axios.request(config)
@@ -120,20 +122,18 @@ export const processTransaction = (queryParams, callback) => {
         const a = document.createElement('a')
 
         a.href = url
-        a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID.v1()
+        a.download = queryParams[Enums.VALUES.FILE_NAME] ? queryParams[Enums.VALUES.FILE_NAME] : UUID()
         a.style.display = 'none'
         document.body.appendChild(a)
         a.click()
 
-        return callback(null)
+        callback()
       })
       .catch((err) => {
         if (err.response) {
-          err = JSON.stringify(err.response)
-        } else if (err.message) {
-          err = err.message
+          err = err.response.data
         } else {
-          err = JSON.stringify(err)
+          err = err.message || JSON.stringify(err)
         }
 
         callback(err)
