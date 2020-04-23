@@ -114,6 +114,8 @@ export const processTransaction = (queryParams, callback) => {
       config.method = Enums.VALUES.METHOD_GET
     }
 
+    config.params = queryParams
+
     Axios.request(config)
       .then((response) => {
         // eslint-disable-next-line
