@@ -10,7 +10,7 @@ const Enums = {
     ROUTE_KEY: 'agiliteroutekey',
     GETFILE: 'getfile',
     EXECUTECONNECTOR: 'executeconnector',
-    FILE_NAME: 'fileName',
+    FILE_NAME: 'filename',
     METHOD_GET: 'get'
   },
   STATUS: {
