@@ -1,10 +1,16 @@
-import { eventEmitter } from './core/core-index'
-import AppConfig from './app-config'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-require('./core/core-index')
+import { Provider, useSelector } from 'react-redux'
+import AgiliteReact from 'agilite-react'
 
-if (AppConfig.enableCustomIndex) {
-  require('./custom/index')
+import Enums from './utils/enums'
+import store from './core/core-store'
+
+const App = () => {
+  // state.core is created using agilite-react-config.js in config folder
+  const config = useSelector(state => state.core)
+  return <AgiliteReact state={config} />
 }
 
-eventEmitter.emit('onappload')
+ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById(Enums.VALUES.ROOT_TAG))

@@ -2,9 +2,9 @@ import React, { memo, useState, useEffect } from 'react'
 import { message, Row, Col, Spin } from 'antd'
 import { getQueryParams } from 'agilite-utils'
 
-import CoreMemoryStore from '../core/core-memory-store'
-import Logo from '../core/resources/agilite-logo-full-web.png'
-import Enums from './resources/enums'
+import CoreMemoryStore from './core/core-memory-store'
+import Logo from './core/resources/agilite-logo-full-web.png'
+import Enums from './utils/enums'
 import { processTransaction } from './utils/utilities'
 
 const theme = CoreMemoryStore.theme
@@ -14,21 +14,23 @@ const App = () => {
   const [status, setStatus] = useState(Enums.STATUS.PROCESSING)
 
   useEffect(() => {
-    // Process URL Parameters
-    const url = new URL(window.location.href)
-
-    processTransaction(getQueryParams(url.search), (err) => {
-      if (err) {
-        message.error(err, 10)
-
-        setIsProcessing(false)
-        setStatus(Enums.STATUS.FAILED)
-      } else {
-        setIsProcessing(false)
-        setStatus(Enums.STATUS.COMPLETED)
-      }
-    })
+    initTransaction()
   }, [])
+
+  const initTransaction = async () => {
+    try {
+      // Process URL Parameters
+      const url = new URL(window.location.href)
+
+      await processTransaction(getQueryParams(url.href))
+      setIsProcessing(false)
+      setStatus(Enums.STATUS.COMPLETED)
+    } catch (err) {
+      message.error(err)
+      setIsProcessing(false)
+      setStatus(Enums.STATUS.FAILED)
+    }
+  }
 
   return (
     <center style={{ marginTop: 100 }}>

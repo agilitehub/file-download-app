@@ -11,12 +11,17 @@ const Enums = {
     GETFILE: 'getfile',
     EXECUTECONNECTOR: 'executeconnector',
     FILE_NAME: 'filename',
-    METHOD_GET: 'get'
+    METHOD_GET: 'get',
+    ROOT_TAG: 'root',
+    ENV_PRODUCTION: 'production'
   },
   STATUS: {
     PROCESSING: 'processing',
     FAILED: 'failed',
     COMPLETED: 'completed'
+  },
+  MESSAGES: {
+    UNKNOWN_ERROR: 'An unknown error occurred. The Agilit-e service may not be available'
   }
 }
 

@@ -1,4 +1,4 @@
-export default {
+const CoreTheme = {
   primary: '#d32f2f',
   primaryLight: '#ffa4a2',
   primaryDark: '#9a0007',
@@ -17,3 +17,5 @@ export default {
   },
   custom: {}
 }
+
+export default CoreTheme

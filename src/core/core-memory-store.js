@@ -1,4 +1,4 @@
-export default {
+const CoreMemoryStore = {
   title: '',
   theme: {},
   user: null,
@@ -13,3 +13,5 @@ export default {
     href: ''
   }
 }
+
+export default CoreMemoryStore
